@@ -1,0 +1,7 @@
+defaults:
+  - __base__
+  - /schema/dataset/colored_mnist@_here_
+
+name: colored_mnist
+skewed_ratio: 5e-2
+severity: 1

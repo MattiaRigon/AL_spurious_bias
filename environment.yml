@@ -1,0 +1,35 @@
+name: alsb_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10  # Changed to match compatible version
+  - pip
+  - colorama==0.4.6
+  - environs==9.5.0
+  - flatdict==4.0.1
+  - lightning==2.2.5
+  - matplotlib==3.8.0
+  - numpy==1.26.4  # Downgraded for compatibility
+  - omegaconf==2.3.0
+  - pandas==2.2.3
+  - pillow==10.4.0
+  - pytest==7.4.0
+  - scikit-learn==1.4.2
+  - scipy==1.11.3  # Downgraded for compatibility
+  - statsmodels==0.13.5  # Downgraded for compatibility
+  - structlog==24.4.0
+  - tqdm==4.66.1
+  - typing_extensions==4.12.2
+  - wand==0.6.10
+  - wandb==0.15.12
+  - pip:
+      - torch==2.1.0  # Installed via pip
+      - torchvision==0.16.0  # Installed via pip
+      - wget==3.2  # Installed via pip
+      - wilds==2.0.0  # Installed via pip
+      - scikit-image  # Installed via pip
+      - neural_tangents  # Installed via pip
+      - netcal  # Installed via pip
+      - loss-landscapes  # Installed via pip
+      - baal  # Installed via pip

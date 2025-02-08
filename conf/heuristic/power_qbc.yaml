@@ -1,0 +1,7 @@
+defaults:
+  - /schema/heuristic/power_qbc@_here_
+  - /distance: norm
+
+seed: ${seed}
+loc: 0.0
+scale: 1.0

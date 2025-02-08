@@ -1,0 +1,8 @@
+defaults:
+  - /schema/model/resnet18@_here_
+  - __base__
+  - optim: sgd
+
+name: resnet18
+pretrained: IMAGENET1K_V1
+freeze_encoder: false

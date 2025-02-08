@@ -1,0 +1,19 @@
+defaults:
+  - __base__
+  - /schema/dataset/corrupted_cifar10@_here_
+
+name: corrupted_cifar10_t0
+skewed_ratio: 5e-2
+severity: 1
+postfix: 0
+corruption_names:
+  - Snow
+  - Frost
+  - Fog
+  - Brightness
+  - Contrast
+  - Spatter
+  - Elastic
+  - JPEG
+  - Pixelate
+  - Saturate

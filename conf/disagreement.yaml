@@ -1,0 +1,19 @@
+defaults:
+  - /schema/job/disagreement@_here_
+  - __base__
+  - dataset: waterbirds
+  - model: resnet50
+  - heuristic: qbc
+  - _self_
+
+n_initial: 100
+train_cfg:
+  n_steps: 100
+  batch_size: 8
+  checkpoint_freq: 5
+  workers: 4
+test_cfg:
+  batch_size: ${train_cfg.batch_size}
+  workers: ${train_cfg.workers}
+num_samples_per_group: null
+per_group_weights: null

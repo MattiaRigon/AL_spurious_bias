@@ -1,0 +1,17 @@
+defaults:
+  - /schema/job/trajectory@_here_
+  - __base__
+  - dataset: waterbirds
+  - model: resnet50
+  - _self_
+
+train_cfg:
+  n_steps: 20
+  batch_size: 128
+  checkpoint_freq: 1
+  workers: 4
+test_cfg:
+  batch_size: ${train_cfg.batch_size}
+  workers: ${train_cfg.workers}
+subset_size: 1000
+resolution: 50

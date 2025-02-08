@@ -1,0 +1,7 @@
+defaults:
+  - __base__
+  - /schema/dataset/binary_cmnist@_here_
+
+name: binary_cmnist
+skewed_ratio: 5e-2
+subsample_train: null

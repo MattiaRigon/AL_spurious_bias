@@ -1,0 +1,5 @@
+defaults:
+  - __base__
+  - /schema/dataset/svhn@_here_
+
+name: svhn

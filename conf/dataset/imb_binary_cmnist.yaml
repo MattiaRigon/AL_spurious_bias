@@ -1,0 +1,6 @@
+defaults:
+  - __base__
+  - /schema/dataset/imb_binary_cmnist@_here_
+
+name: imb_binary_cmnist
+skewed_ratio: 0.9

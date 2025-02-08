@@ -1,0 +1,5 @@
+defaults:
+  - __base__
+  - /schema/dataset/treeperson@_here_
+
+name: treeperson

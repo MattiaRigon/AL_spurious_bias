@@ -1,0 +1,6 @@
+defaults:
+  - /schema/optim/sgd@_here_
+
+lr: 1e-3
+momentum: 0.9
+weight_decay: 1e-4

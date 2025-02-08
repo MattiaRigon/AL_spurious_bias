@@ -1,0 +1,6 @@
+defaults:
+  - /schema/model/mlp@_here_
+  - __base__
+  - optim: sgd
+
+name: mlp

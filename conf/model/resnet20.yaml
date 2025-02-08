@@ -1,0 +1,7 @@
+defaults:
+  - /schema/model/resnet20@_here_
+  - __base__
+  - optim: sgd
+
+name: resnet20
+freeze_encoder: false

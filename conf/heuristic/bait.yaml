@@ -1,0 +1,5 @@
+defaults:
+  - /schema/heuristic/bait@_here_
+
+lamb: 1
+batchSize: 512

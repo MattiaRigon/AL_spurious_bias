@@ -1,0 +1,5 @@
+defaults:
+  - __base__
+  - /schema/dataset/waterbirds@_here_
+
+name: waterbirds

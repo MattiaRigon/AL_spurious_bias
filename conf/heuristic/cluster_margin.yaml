@@ -1,0 +1,6 @@
+defaults:
+  - /schema/heuristic/cluster_margin@_here_
+
+seed: ${seed}
+n_clusters: 20
+linkage: average

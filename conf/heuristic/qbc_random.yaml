@@ -1,0 +1,5 @@
+defaults:
+  - /schema/heuristic/qbc_random@_here_
+  - /distance: norm
+
+seed: ${seed}

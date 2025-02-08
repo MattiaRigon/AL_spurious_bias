@@ -1,0 +1,4 @@
+defaults:
+  - /schema/heuristic/badge@_here_
+
+seed: ${seed}

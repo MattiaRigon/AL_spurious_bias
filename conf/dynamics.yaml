@@ -1,0 +1,17 @@
+defaults:
+  - /schema/job/dynamics@_here_
+  - __base__
+  - dataset: waterbirds
+  - model: resnet50
+  - distance: norm
+  - _self_
+
+n_initial: 0.1
+train_cfg:
+  n_steps: 100
+  batch_size: 8
+  checkpoint_freq: 5
+  workers: 4
+test_cfg:
+  batch_size: ${train_cfg.batch_size}
+  workers: ${train_cfg.workers}

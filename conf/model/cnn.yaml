@@ -1,0 +1,8 @@
+defaults:
+  - /schema/model/cnn@_here_
+  - __base__
+  - optim: adam
+
+name: cnn
+optim:
+  weight_decay: 0.0

@@ -1,0 +1,19 @@
+defaults:
+  - __base__
+  - /schema/dataset/corrupted_cifar10@_here_
+
+name: corrupted_cifar10_t1
+skewed_ratio: 5e-2
+severity: 1
+postfix: 1
+corruption_names:
+  - Gaussian Noise
+  - Shot Noise
+  - Impulse Noise
+  - Speckle Noise
+  - Gaussian Blur
+  - Defocus Blur
+  - Glass Blur
+  - Motion Blur
+  - Zoom Blur
+  - Original

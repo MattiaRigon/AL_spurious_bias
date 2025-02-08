@@ -1,0 +1,5 @@
+defaults:
+  - /schema/heuristic/iwqbc@_here_
+  - /distance: norm
+
+beta: 1.0

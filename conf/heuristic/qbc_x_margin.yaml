@@ -1,0 +1,5 @@
+defaults:
+  - /schema/heuristic/qbc_x_margin@_here_
+  - /distance: norm
+
+qbc_weight: 0.9

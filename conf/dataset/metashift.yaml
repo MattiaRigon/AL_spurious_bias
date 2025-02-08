@@ -1,0 +1,5 @@
+defaults:
+  - __base__
+  - /schema/dataset/metashift@_here_
+
+name: metashift

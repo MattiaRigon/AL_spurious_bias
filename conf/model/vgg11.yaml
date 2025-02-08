@@ -1,0 +1,8 @@
+defaults:
+  - /schema/model/vgg11@_here_
+  - __base__
+  - optim: adam
+
+name: vgg11
+optim:
+  weight_decay: 0.0

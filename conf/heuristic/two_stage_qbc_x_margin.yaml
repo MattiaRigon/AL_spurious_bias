@@ -1,0 +1,5 @@
+defaults:
+  - /schema/heuristic/two_stage_qbc_x_margin@_here_
+  - /distance: norm
+
+first_batch_ratio: 1.5

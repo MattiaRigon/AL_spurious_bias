@@ -1,0 +1,6 @@
+defaults:
+  - /schema/heuristic/power_margin@_here_
+
+seed: ${seed}
+loc: 0.0
+scale: 1.0

@@ -1,0 +1,7 @@
+defaults:
+  - __base__
+  - /schema/dataset/celeba@_here_
+
+name: celeba
+target: Brown_Hair
+subsample_train: 10000

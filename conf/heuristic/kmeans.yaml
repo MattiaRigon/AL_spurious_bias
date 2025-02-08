@@ -1,0 +1,4 @@
+defaults:
+  - /schema/heuristic/kmeans@_here_
+
+seed: ${seed}

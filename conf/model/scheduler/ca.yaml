@@ -1,0 +1,6 @@
+defaults:
+  - /schema/scheduler/ca@_here_
+  - __base__
+
+T_max: ${train_cfg.checkpoint_freq}
+eta_min: 0

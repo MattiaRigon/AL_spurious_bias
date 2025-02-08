@@ -1,0 +1,5 @@
+defaults:
+  - /schema/optim/adam@_here_
+
+lr: 1e-3
+weight_decay: 1e-4
