@@ -31,14 +31,18 @@ def get_masks(data, prompt, segmentation_model):
 
         output_dir = "./output/"
         os.makedirs(output_dir, exist_ok=True)
-
+        _mask = torch.zeros(image_tensor.shape[1], image_tensor.shape[2], dtype=torch.uint8)
         for idx, result in enumerate(results):
             for mask_idx, mask in enumerate(result["masks"]):
                 mask_img = Image.fromarray((mask * 255).astype(np.uint8))  # Convertire in scala di grigi 8-bit
                 mask_path = f"{output_dir}/mask{i}.png"
                 mask_img.save(mask_path)
                 mask_tensor = torch.tensor(mask, dtype=torch.uint8)
-                masks.append(mask_tensor)
+                _mask += mask_tensor
+        
+        # clip mask to 0,1
+        _mask[_mask > 0] = 1
+        masks.append(_mask)
     return torch.stack(masks)
 
     

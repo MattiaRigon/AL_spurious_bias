@@ -466,12 +466,13 @@ class ModelWrapper(MetricMixin):
         optimizer.zero_grad()
         
         if rrr:
-            output, gradcam = self.model(data, return_gradcam=True)
+            data.requires_grad_(True)
+            target_mask = get_explanations(data.clone(), "waterbirds", self.explanation_model)
+            output = self.model(data)
+ 
+            # show_gradcam(data, gradcam, num_samples=5)
             
-            show_gradcam(data, gradcam, num_samples=5)
-            target_mask = get_explanations(data, "waterbirds", self.explanation_model)
-            
-            loss = self.criterion(output, target, gradcam, target_mask)
+            loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None)
         else:
             output = self.model(data)
             loss = self.criterion(output, target)
