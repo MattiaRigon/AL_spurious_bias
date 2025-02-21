@@ -39,7 +39,7 @@ from utils.rrr_loss import RRRLoss
 from hydra.core.global_hydra import GlobalHydra
 from lang_sam import LangSAM
 
-from utils.singleton_langsam import LangSAMSingleton
+# from utils.singleton_langsam import LangSAMSingleton
 
 
 log = logging.getLogger("ModelWrapper")
@@ -80,9 +80,9 @@ class ModelWrapper(MetricMixin):
 
         raise_warnings_cache_replicated(self.model, replicate_in_memory=replicate_in_memory)
 
-        if isinstance(criterion, RRRLoss):
-            singleton = LangSAMSingleton.get_instance()
-            self.explanation_model = singleton.get_model()
+        # if isinstance(criterion, RRRLoss):
+        #     singleton = LangSAMSingleton.get_instance()
+        #     self.explanation_model = singleton.get_model()
 
     def train_on_dataset_epoch(
         self,
@@ -466,14 +466,9 @@ class ModelWrapper(MetricMixin):
         optimizer.zero_grad()
         
         if rrr:
+            target, target_mask = target
             data.requires_grad_(True)
-            target_mask = get_explanations(data.clone(), "waterbirds", self.explanation_model)
-            target_mask = to_device(target_mask, self.device)
             output = self.model(data, output_activations=False)
-
- 
-            # show_gradcam(data, gradcam, num_samples=5)
-            
             loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None, 2)
         else:
             output = self.model(data)
@@ -811,7 +806,10 @@ class ModelWrapper(MetricMixin):
             )
         )  # pred, y, attr, group
 
-        preds, target, attr, groups = [np.concatenate([item[i] for item in foo], axis=0) for i in range(4)]
+        preds, target, attr, groups = [
+            np.concatenate([item[i][0] if isinstance(item[i], list) else item[i] for item in foo], axis=0) 
+            for i in range(4)
+        ]        
         metrics = eval_metrics(targets=target, attributes=attr, preds=preds, gs=groups)
         log.info(
             "Evaluation complete:"

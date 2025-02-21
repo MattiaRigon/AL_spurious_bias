@@ -8,12 +8,12 @@ import wandb
 from omegaconf import OmegaConf
 
 from conf import job
-from lang_sam import LangSAM
+# from lang_sam import LangSAM
 
 from hydra.core.global_hydra import GlobalHydra
 from hydra.core.global_hydra import GlobalHydra
 from PIL import Image
-from utils.singleton_langsam import LangSAMSingleton
+# from utils.singleton_langsam import LangSAMSingleton
 
 to_container = OmegaConf.to_container
 to_object = OmegaConf.to_object
@@ -33,12 +33,12 @@ def main(cfg: job.JobBase):
 
 if __name__ == "__main__":
 
-    # load the model using the singleton pattern, before to change configuration
-    singleton = LangSAMSingleton()
+    # # load the model using the singleton pattern, before to change configuration
+    # singleton = LangSAMSingleton()
     
     if GlobalHydra.instance().is_initialized():
         GlobalHydra.instance().clear()
 
-    model = singleton.get_model()
+    # model = singleton.get_model()
     
     main()
