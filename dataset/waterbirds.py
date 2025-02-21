@@ -1,3 +1,4 @@
+from pathlib import Path
 import torchvision.transforms as transforms
 from wilds import get_dataset
 
@@ -6,7 +7,10 @@ from . import DatasetBase
 
 class WaterBirds(DatasetBase):
     def create(self):
-        return get_dataset(dataset="waterbirds", download=True, root_dir=self.root)
+        dataset=  get_dataset(dataset="waterbirds", download=True, root_dir=self.root)
+        path_mask = "masks"
+        masks = get_dataset(dataset="waterbirds", download=False, root_dir=Path(path_mask))
+        return dataset, masks
 
     def get_transform(self, _):
         return transforms.Compose(

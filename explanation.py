@@ -20,8 +20,6 @@ if __name__ == "__main__":
     for folder in tqdm(all_folders, desc="Processing folders"):
         folder_path = os.path.join(dataset_path, folder)
         save_folder = os.path.join(dataset_explanations_folder, folder)
-        if os.path.exists(save_folder):
-            continue
         os.makedirs(save_folder, exist_ok=True)
         if not os.path.isdir(folder_path):
             continue

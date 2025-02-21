@@ -324,7 +324,7 @@ class ModelWrapper(MetricMixin):
             pred = map_on_tensor(lambda x: x.detach(), pred)
             if half:
                 pred = map_on_tensor(lambda x: x.half(), pred)
-            yield map_on_tensor(lambda x: x.cpu().numpy(), pred)
+            yield map_on_tensor(lambda x: x.cpu().float().detach().numpy(), pred)
 
     def predict_on_dataset(
         self,
@@ -468,11 +468,13 @@ class ModelWrapper(MetricMixin):
         if rrr:
             data.requires_grad_(True)
             target_mask = get_explanations(data.clone(), "waterbirds", self.explanation_model)
-            output = self.model(data)
+            target_mask = to_device(target_mask, self.device)
+            output = self.model(data, output_activations=False)
+
  
             # show_gradcam(data, gradcam, num_samples=5)
             
-            loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None)
+            loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None, 2)
         else:
             output = self.model(data)
             loss = self.criterion(output, target)

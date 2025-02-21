@@ -65,7 +65,7 @@ def denormalize_image(image_tensor, mean=[0.485, 0.456, 0.406], std=[0.229, 0.22
     std = torch.tensor(std).view(3, 1, 1).to(image_tensor.device)
     image = image_tensor * std + mean  # Reverse normalization
     image = torch.clamp(image, 0, 1)  # Clip values to [0,1]
-    return image.permute(1, 2, 0).cpu().numpy()  # Convert to (H, W, C) format
+    return image.permute(1, 2, 0).cpu().detach().numpy()  # Convert to (H, W, C) format
 
 def overlay_gradcam(image_tensor, gradcam_heatmap, alpha=0.4):
     """

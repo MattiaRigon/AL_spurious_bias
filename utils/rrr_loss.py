@@ -54,6 +54,7 @@ class RRRLoss(_WeightedLoss):
         right_reason_loss = torch.sum(A_gradX, dim=list(range(1, len(A_gradX.shape))))
         right_reason_loss = reduce_func(class_weights_batch * right_reason_loss)
         right_reason_loss *= l2_grads
+        
         return right_answer_loss + right_reason_loss
         
 
