@@ -59,8 +59,8 @@ class WaterBirdsDatasetWrapper(WILDSDataset):
         
         self.dataset = dataset
         to_tensor = ToTensor()
-        self.masks = {i:apply_transforms(to_tensor(masks[i][0])) for i in range(len(masks))}  # Store masks in a dict
-        
+        self.masks = {i:(apply_transforms(to_tensor(masks[i][0])) > 0).float() for i in range(len(masks))}  # Store masks in a dict
+
         # Initialize WILDSDataset properties
         self._dataset_name = dataset.dataset_name + "_masked"
         self._data_dir = dataset.data_dir

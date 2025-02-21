@@ -14,7 +14,7 @@ query_size: 74
 train_cfg:
   batch_size: 25
   checkpoint_freq: 10
-  n_steps: 200
+  n_steps: 10
   rrr: true
   workers: 4
 test_cfg:
