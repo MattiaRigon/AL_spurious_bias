@@ -17,21 +17,20 @@ if __name__ == "__main__":
     dataset_path = os.path.join(dataset_root, dataset_folder)
 
     all_folders = os.listdir(dataset_path)
+    all_folders = [folder for folder in all_folders if os.path.isdir(os.path.join(dataset_path, folder))]
     num = 0
     for folder in tqdm(all_folders, desc="Processing folders"):
         folder_path = os.path.join(dataset_path, folder)
         save_folder = os.path.join(dataset_explanations_folder, folder)
         os.makedirs(save_folder, exist_ok=True)
-        if folder != "026.Bronzed_Cowbird":
-            continue
         images = [f for f in os.listdir(folder_path) if f.endswith('.jpg')]
         num += len(images)
         for image in images:
+            if os.path.exists(os.path.join(save_folder, image)):
+                continue
             image_pil = Image.open(os.path.join(folder_path,image)).convert("RGB")
             results = model.predict([image_pil], [text_prompt])
-
-            output_dir = os.path.join(dataset_root, f"{dataset_folder}_explanations")
-            os.makedirs(output_dir, exist_ok=True)
+            os.makedirs(dataset_explanations_folder, exist_ok=True)
             combined_mask = None
             for idx, result in enumerate(results):
                 for mask_idx, mask in enumerate(result["masks"]):
@@ -45,3 +44,7 @@ if __name__ == "__main__":
                 
                 combined_mask_path = os.path.join(save_folder, image)
                 combined_mask_img.save(combined_mask_path)
+            else:
+                print(f"No mask found for {image}")
+                black_image = Image.new("RGB", image_pil.size, (0, 0, 0))
+                black_image.save(os.path.join(save_folder, image))
