@@ -7,9 +7,11 @@ from . import DatasetBase
 
 class WaterBirds(DatasetBase):
     def create(self):
-        dataset=  get_dataset(dataset="waterbirds", download=True, root_dir=self.root)
-        path_mask = "masks"
+        dataset = get_dataset(dataset="waterbirds", download=True, root_dir=self.root)
+        path_mask = Path(self.root).parent / "masks"
         masks = get_dataset(dataset="waterbirds", download=False, root_dir=Path(path_mask))
+        dataset.masks = {i: masks[i][0] for i in range(len(masks))}  # Store only mask tensors
+
         return dataset, masks
 
     def get_transform(self, _):

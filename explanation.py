@@ -9,10 +9,11 @@ if __name__ == "__main__":
     model = LangSAM()
 
     dataset_root = "data"
+    masks_root = "masks"
     text_prompt = "bird."
 
     dataset_folder = "waterbirds_v1.0"
-    dataset_explanations_folder = os.path.join(dataset_root,f"{dataset_folder}_explanations")
+    dataset_explanations_folder = os.path.join(masks_root,f"{dataset_folder}_explanations")
     dataset_path = os.path.join(dataset_root, dataset_folder)
 
     all_folders = os.listdir(dataset_path)
@@ -21,7 +22,7 @@ if __name__ == "__main__":
         folder_path = os.path.join(dataset_path, folder)
         save_folder = os.path.join(dataset_explanations_folder, folder)
         os.makedirs(save_folder, exist_ok=True)
-        if not os.path.isdir(folder_path):
+        if folder != "026.Bronzed_Cowbird":
             continue
         images = [f for f in os.listdir(folder_path) if f.endswith('.jpg')]
         num += len(images)
