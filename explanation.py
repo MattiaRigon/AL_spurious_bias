@@ -13,7 +13,7 @@ if __name__ == "__main__":
     text_prompt = "bird."
 
     dataset_folder = "waterbirds_v1.0"
-    dataset_explanations_folder = os.path.join(masks_root,f"{dataset_folder}_explanations")
+    dataset_explanations_folder = os.path.join(masks_root,f"{dataset_folder}")
     dataset_path = os.path.join(dataset_root, dataset_folder)
 
     all_folders = os.listdir(dataset_path)
