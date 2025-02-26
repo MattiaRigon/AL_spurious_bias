@@ -14,11 +14,11 @@ query_size: 74
 train_cfg:
   batch_size: 25
   checkpoint_freq: 10
-  n_steps: 10
-  rrr: true
+  n_steps: 200
+  rrr: false
   workers: 4
 test_cfg:
   batch_size: ${train_cfg.batch_size}
   workers: ${train_cfg.workers}
 resume: null
-rrr: True
+rrr: false

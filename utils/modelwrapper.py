@@ -461,7 +461,8 @@ class ModelWrapper(MetricMixin):
         Returns:
             Tensor, the loss computed from the criterion.
         """
-
+        if not rrr:
+            target = target[0]
         data, target = to_device(data, self.device), to_device(target, self.device)
         optimizer.zero_grad()
         

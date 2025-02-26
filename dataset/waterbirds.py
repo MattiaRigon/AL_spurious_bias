@@ -30,6 +30,11 @@ def apply_transforms(input_tensor):
     return input_tensor
 
 class WaterBirds(DatasetBase):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # self.root = Path(__file__).parent.parent / "data"
+
     def create(self):
         dataset = get_dataset(dataset="waterbirds", download=True, root_dir=self.root)
         path_mask = Path(self.root).parent / "masks"

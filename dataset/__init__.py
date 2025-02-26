@@ -20,6 +20,7 @@ class DatasetBase(ABC):
     root: Path
     seed: int
     name: str
+    # rrr: Optional[bool] = False
 
     @classmethod
     def __init_subclass__(cls, **kwargs) -> None:
