@@ -37,13 +37,13 @@ class WaterBirds(DatasetBase):
 
     def create(self):
         dataset = get_dataset(dataset="waterbirds", download=True, root_dir=self.root)
-        path_mask = Path(self.root).parent / "masks"
-        masks = get_dataset(dataset="waterbirds", download=False, root_dir=Path(path_mask))
+        # path_mask = Path(self.root).parent / "masks"
+        # masks = get_dataset(dataset="waterbirds", download=False, root_dir=Path(path_mask))
 
-        # Store masks inside the wrapper class
-        wrapped_dataset = WaterBirdsDatasetWrapper(dataset, masks)
+        # # Store masks inside the wrapper class
+        # wrapped_dataset = WaterBirdsDatasetWrapper(dataset, masks)
 
-        return wrapped_dataset
+        return dataset
 
     def get_transform(self, _):
         return transforms.Compose(
