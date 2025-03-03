@@ -5,7 +5,7 @@ from PIL import Image
 from torchvision.datasets import MNIST
 from wilds.common.grouper import CombinatorialGrouper
 from wilds.datasets.wilds_dataset import WILDSDataset
-from typing import Optional
+
 from . import DatasetBase
 
 
@@ -84,7 +84,7 @@ class BinaryCMNISTBase(WILDSDataset):
 
 class BinaryCMNIST(DatasetBase):
     skewed_ratio: float
-    subsample_train: Optional[int]
+    subsample_train: int | None
 
     def create(self):
         dataset = BinaryCMNISTBase(

@@ -2,7 +2,6 @@ import logging
 from abc import ABC, abstractclassmethod
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Optional
 
 import torch
 import torch.multiprocessing
@@ -26,7 +25,7 @@ class WandBConfig:
     mode: WandBModeEnum
     project: str
     entity: str
-    tags: Optional[list[str]]
+    tags: list[str] | None
 
     def __post_init__(self):
         self.mode = self.mode.name

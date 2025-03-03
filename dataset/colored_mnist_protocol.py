@@ -5,6 +5,8 @@ from https://github.com/alinlab/LfF/blob/master/data/colored_mnist_protocol.py
 # flake8: noqa
 import os
 import torch
+import cv2
+import numpy as np
 from functools import partial
 
 dir_path = os.path.dirname(os.path.realpath(__file__))

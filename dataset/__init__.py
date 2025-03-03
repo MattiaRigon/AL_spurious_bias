@@ -3,7 +3,6 @@ from abc import ABC, abstractclassmethod
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 import torchvision.transforms as transforms
 from hydra.utils import to_absolute_path
@@ -20,7 +19,6 @@ class DatasetBase(ABC):
     root: Path
     seed: int
     name: str
-    # rrr: Optional[bool] = False
 
     @classmethod
     def __init_subclass__(cls, **kwargs) -> None:
@@ -47,7 +45,7 @@ class DatasetBase(ABC):
         ...
 
     @property
-    def get_transform(self, split: str) -> Optional[transforms.Compose]:
+    def get_transform(self, split: str) -> transforms.Compose | None:
         return None
 
 

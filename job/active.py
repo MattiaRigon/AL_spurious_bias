@@ -4,7 +4,6 @@ import math
 from copy import deepcopy
 from functools import partial
 from pathlib import Path
-from typing import Optional
 
 import flatdict
 import numpy as np
@@ -14,7 +13,6 @@ import wandb
 from colorama import Fore, Style
 from hydra.utils import instantiate
 
-from model.optim import OptimizerConfig
 from utils.active_loop import ActiveLearningLoop
 from utils.al_dataset import ActiveLearningDataset
 from utils.heuristics import (
@@ -25,7 +23,6 @@ from utils.heuristics import (
     ClusterMargin,
 )
 from utils.modelwrapper import ModelWrapper, TestConfig, TrainConfig
-from utils.rrr_loss import RRRLoss
 from utils.wandb_artifact import Artifact
 
 from . import JobBase
@@ -42,9 +39,7 @@ class ActiveLearning(JobBase):
     train_cfg: TrainConfig
     test_cfg: TestConfig
     save_dict: bool
-    resume: Optional[Path]
-    rrr: Optional[bool]
-    # optim: Optional[OptimizerConfig]  # Use OptimizerConfig instead of dict
+    resume: Path | None
 
     def __post_init__(self):
         super().__post_init__()
@@ -66,11 +61,8 @@ class ActiveLearning(JobBase):
             attr_grouper=self.dataset.attr_grouper,
             group_grouper=self.dataset.grouper,
         )
-        if self.rrr:
-            criterion = RRRLoss()
-        else:
-            criterion = nn.CrossEntropyLoss()
-        self.wrapped_model = ModelWrapper(self.model, criterion)
+
+        self.wrapped_model = ModelWrapper(self.model, nn.CrossEntropyLoss())
 
         get_prob_fn = getattr(self.wrapped_model, self.heuristic.get_prob_fn_name)
         get_prob_fn = partial(get_prob_fn, **self.test_cfg.dict())

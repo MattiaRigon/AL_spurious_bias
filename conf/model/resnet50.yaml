@@ -6,9 +6,3 @@ defaults:
 name: resnet50
 pretrained: IMAGENET1K_V1
 freeze_encoder: false
-
-optim:
-  _target_: model.optim.SGD
-  lr: 0.001
-  momentum: 0.9
-  weight_decay: 1e-4

@@ -1,4 +1,3 @@
-from typing import Optional
 import torchvision.transforms as transforms
 import numpy as np
 from .celebA_dataset import CelebADataset
@@ -15,7 +14,7 @@ class TargetEnum(Enum):
 
 class CelebA(DatasetBase):
     target: TargetEnum
-    subsample_train: Optional[int]
+    subsample_train: int | None
 
     def create(self):
         dataset = CelebADataset(root_dir=self.root, download=True, target_name=self.target.name)
