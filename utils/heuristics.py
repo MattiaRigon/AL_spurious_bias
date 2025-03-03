@@ -5,7 +5,7 @@ import pdb
 from collections import defaultdict
 from dataclasses import dataclass, field
 
-import faiss
+# import faiss
 import numpy as np
 import torch
 from baal.active.heuristics import BALD  # noqa: F401, E402
@@ -131,7 +131,7 @@ class QBC(AbstractHeuristic):
         elif isinstance(distance, Distance):
             self._dist_fn = distance
 
-    def get_uncertainties(self, predictions):
+    def get_uncertainties(self, predictions, target_predictions=None):
         # predictions: np.ndarray = predictions[1]
         preds = _to_torch(predictions)
         dist_matrix = (
@@ -175,29 +175,29 @@ class IWQBC(QBC, ImportanceWeighting):
         return self.beta * self._weights + 1
 
 
-class KMeans(AbstractHeuristic, RequireN):
-    """
-    from https://github.com/JordanAsh/badge/blob/master/query_strategies/kmeans_sampling.py
-    """
+# class KMeans(AbstractHeuristic, RequireN):
+#     """
+#     from https://github.com/JordanAsh/badge/blob/master/query_strategies/kmeans_sampling.py
+#     """
 
-    def __init__(self, seed: int):
-        super().__init__()
-        self.seed = seed
+#     def __init__(self, seed: int):
+#         super().__init__()
+#         self.seed = seed
 
-    def get_ranks(self, embeddings, n):
-        d = embeddings.shape[1]
-        kmeans = faiss.Kmeans(d, n, seed=self.seed, gpu=True)
-        kmeans.train(embeddings)
+#     def get_ranks(self, embeddings, n):
+#         d = embeddings.shape[1]
+#         kmeans = faiss.Kmeans(d, n, seed=self.seed, gpu=True)
+#         kmeans.train(embeddings)
 
-        dist, cluster_idxs = kmeans.index.search(embeddings, 1)
-        dist, cluster_idxs = dist.squeeze(), cluster_idxs.squeeze()
+#         dist, cluster_idxs = kmeans.index.search(embeddings, 1)
+#         dist, cluster_idxs = dist.squeeze(), cluster_idxs.squeeze()
 
-        chosen = []
-        for i in range(n):
-            idx = np.where(cluster_idxs == i)[0]
-            chosen.append(idx[dist[idx].argmin()])
-        chosen = np.array(chosen)
-        return chosen, None
+#         chosen = []
+#         for i in range(n):
+#             idx = np.where(cluster_idxs == i)[0]
+#             chosen.append(idx[dist[idx].argmin()])
+#         chosen = np.array(chosen)
+#         return chosen, None
 
 
 class CoreSet(AbstractHeuristic, RequireN, RequireLabelledStats):
