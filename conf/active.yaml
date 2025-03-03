@@ -9,12 +9,12 @@ defaults:
 reset_each_round: true
 save_dict: false
 n_al_steps: 10
-n_initial: 100
-query_size: 10
+n_initial: 590
+query_size: 74
 train_cfg:
-  n_steps: 100
-  batch_size: 8
-  checkpoint_freq: 5
+  n_steps: 200
+  batch_size: 25
+  checkpoint_freq: 10
   workers: 4
 test_cfg:
   batch_size: ${train_cfg.batch_size}
