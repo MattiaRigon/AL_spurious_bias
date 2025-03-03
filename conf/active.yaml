@@ -8,7 +8,7 @@ defaults:
 
 reset_each_round: true
 save_dict: false
-n_al_steps: 10
+n_al_steps: 20
 n_initial: 590
 query_size: 74
 train_cfg:
