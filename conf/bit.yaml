@@ -1,8 +1,8 @@
 defaults:
   - /schema/job/visual@_here_
   - dataset: waterbirds
-  - override hydra/job_logging: colorlog
-  - override hydra/hydra_logging: colorlog
+  - override hydra/job_logging: default  
+  - override hydra/hydra_logging: default  
   - _self_
 
 hydra:
@@ -11,8 +11,10 @@ hydra:
 
 seed: 42
 wandb:
-  mode: disabled
-  project: manhattan
-  entity: yjng
+  mode: online
+  project: smarter_xil
+  entity: rigonmattia-university-of-trento
+  tags: null
+
 model: BiT-M-R50x1
 batch_size: 5
