@@ -86,7 +86,7 @@ class ActiveLearningLoop:
                 unlabelled_g = unlabelled_g[indices]
                 probs = (labelled_g, unlabelled_g)
             else:
-                probs = self.get_probabilities(pool)
+                probs = self.get_probabilities(pool, **self.kwargs)
             if probs is not None and (isinstance(probs, types.GeneratorType) or len(probs) > 0):
                 if isinstance(self.heuristic, heuristics.RequireN):
                     to_label, uncertainty = self.heuristic.get_ranks(probs, self.query_size)

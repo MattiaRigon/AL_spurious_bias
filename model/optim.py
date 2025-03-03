@@ -24,12 +24,6 @@ class OptimizerConfig:
         if "_target_" in params:
             del params["_target_"]
         return f"{name}({', '.join([f'{f}={value}' for f, value in params.items()])})"
-    
-    def get_target(self):
-        return self._target_
-
-    def __getitem__(self, key):
-        return getattr(self, key)
 
 
 class SGDConfig(OptimizerConfig):

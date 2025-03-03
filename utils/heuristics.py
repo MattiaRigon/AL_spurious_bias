@@ -5,7 +5,7 @@ import pdb
 from collections import defaultdict
 from dataclasses import dataclass, field
 
-# import faiss
+import faiss
 import numpy as np
 import torch
 from baal.active.heuristics import BALD  # noqa: F401, E402
@@ -26,7 +26,6 @@ from utils.misc import to_device
 
 from .distance import Distance
 from .misc import _to_torch
-from typing import Union
 
 logger = logging.getLogger(__name__)
 
@@ -132,7 +131,7 @@ class QBC(AbstractHeuristic):
         elif isinstance(distance, Distance):
             self._dist_fn = distance
 
-    def get_uncertainties(self, predictions, **kwargs):
+    def get_uncertainties(self, predictions):
         # predictions: np.ndarray = predictions[1]
         preds = _to_torch(predictions)
         dist_matrix = (
@@ -186,7 +185,6 @@ class KMeans(AbstractHeuristic, RequireN):
         self.seed = seed
 
     def get_ranks(self, embeddings, n):
-        import faiss
         d = embeddings.shape[1]
         kmeans = faiss.Kmeans(d, n, seed=self.seed, gpu=True)
         kmeans.train(embeddings)
@@ -290,7 +288,7 @@ class ReversedMargin(Margin):
         super().__init__()
         self.reversed = True
 
-    def compute_score(self, predictions: Union[np.ndarray, tuple]):
+    def compute_score(self, predictions: np.ndarray | tuple):
         if predictions.ndim == 3:
             predictions = predictions[..., -1]
         return 1 - super().compute_score(predictions)

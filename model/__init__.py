@@ -7,7 +7,6 @@ from hydra.utils import instantiate
 from omegaconf import MISSING
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import LRScheduler
-from typing import Optional
 from typing_extensions import dataclass_transform
 
 from .optim import OptimizerConfig, SchedulerConfig
@@ -19,7 +18,8 @@ logger = logging.getLogger(__name__)
 @dataclass_transform()
 class ModelBase(ABC, torch.nn.Module):
     name: str = MISSING
-    scheduler: Optional[SchedulerConfig] = field(default=None)
+    optim: OptimizerConfig = MISSING
+    scheduler: SchedulerConfig | None = field(default=None)
 
     @classmethod
     def __init_subclass__(cls, **kwargs) -> None:
@@ -46,7 +46,7 @@ class ModelBase(ABC, torch.nn.Module):
     def setup(self, n_classes: int) -> None:
         ...
 
-    def get_optimizer(self) -> tuple[Optimizer, Optional[LRScheduler]]:
+    def get_optimizer(self) -> tuple[Optimizer, LRScheduler | None]:
         optimizer = instantiate(self.optim, params=self.parameters())
         if self.scheduler is not None:
             scheduler = instantiate(self.scheduler, optimizer)

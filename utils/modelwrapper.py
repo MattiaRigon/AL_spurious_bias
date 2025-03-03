@@ -33,14 +33,7 @@ from wilds.common.grouper import CombinatorialGrouper
 
 from utils.dataloader import InfiniteDataLoader
 from utils.eval_helper import eval_metrics
-from utils.explanations import get_explanations, show_gradcam
 from utils.misc import to_device
-from utils.rrr_loss import RRRLoss
-from hydra.core.global_hydra import GlobalHydra
-from lang_sam import LangSAM
-
-# from utils.singleton_langsam import LangSAMSingleton
-
 
 log = logging.getLogger("ModelWrapper")
 
@@ -79,10 +72,6 @@ class ModelWrapper(MetricMixin):
         self.element_wise_criterion.reduction = "none"
 
         raise_warnings_cache_replicated(self.model, replicate_in_memory=replicate_in_memory)
-
-        # if isinstance(criterion, RRRLoss):
-        #     singleton = LangSAMSingleton.get_instance()
-        #     self.explanation_model = singleton.get_model()
 
     def train_on_dataset_epoch(
         self,
@@ -135,7 +124,6 @@ class ModelWrapper(MetricMixin):
         upload=False,
         collate_fn: Optional[Callable] = None,
         regularizer: Optional[Callable] = None,
-        rrr: bool = False,
     ):
         """
         Train for `epoch` epochs on a Dataset `dataset.
@@ -170,7 +158,7 @@ class ModelWrapper(MetricMixin):
         self._reset_metrics("train")
         for step in tqdm(range(n_steps)):
             data, target, *_ = next(loader)
-            _ = self.train_on_batch(data, target, optimizer, lr_scheduler, regularizer, rrr)
+            _ = self.train_on_batch(data, target, optimizer, lr_scheduler, regularizer)
             if ((step % checkpoint_freq == 0) or (step == n_steps - 1)) and (step > 0):
                 history.append(self.get_metrics("train")["train_loss"])
 
@@ -194,7 +182,6 @@ class ModelWrapper(MetricMixin):
         workers: int = 4,
         collate_fn: Optional[Callable] = None,
         average_predictions: int = 1,
-        rrr : bool = False
     ):
         """
         Test the model on a Dataset `dataset`.
@@ -324,7 +311,7 @@ class ModelWrapper(MetricMixin):
             pred = map_on_tensor(lambda x: x.detach(), pred)
             if half:
                 pred = map_on_tensor(lambda x: x.half(), pred)
-            yield map_on_tensor(lambda x: x.cpu().float().detach().numpy(), pred)
+            yield map_on_tensor(lambda x: x.cpu().numpy(), pred)
 
     def predict_on_dataset(
         self,
@@ -446,7 +433,7 @@ class ModelWrapper(MetricMixin):
         return loss
 
     def train_on_batch(
-        self, data, target, optimizer, lr_scheduler: Optional[LRScheduler], regularizer: Optional[Callable] = None, rrr: bool = False
+        self, data, target, optimizer, lr_scheduler: LRScheduler | None, regularizer: Optional[Callable] = None
     ):
         """
         Train the current model on a batch using `optimizer`.
@@ -461,19 +448,11 @@ class ModelWrapper(MetricMixin):
         Returns:
             Tensor, the loss computed from the criterion.
         """
-        # if not rrr:
-            # target = target[0]
+
         data, target = to_device(data, self.device), to_device(target, self.device)
         optimizer.zero_grad()
-        
-        if rrr:
-            target, target_mask = target
-            data.requires_grad_(True)
-            output = self.model(data, output_activations=False)
-            loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None, 2)
-        else:
-            output = self.model(data)
-            loss = self.criterion(output, target)
+        output = self.model(data)
+        loss = self.criterion(output, target)
 
         if regularizer:
             regularized_loss = loss + regularizer()
@@ -807,10 +786,7 @@ class ModelWrapper(MetricMixin):
             )
         )  # pred, y, attr, group
 
-        preds, target, attr, groups = [
-            np.concatenate([item[i][0] if isinstance(item[i], list) else item[i] for item in foo], axis=0) 
-            for i in range(4)
-        ]        
+        preds, target, attr, groups = [np.concatenate([item[i] for item in foo], axis=0) for i in range(4)]
         metrics = eval_metrics(targets=target, attributes=attr, preds=preds, gs=groups)
         log.info(
             "Evaluation complete:"
@@ -932,7 +908,7 @@ class ModelWrapper(MetricMixin):
 
         for step, ckpt in (bar := tqdm(ckpts.items())):
             bar.set_description(f"ckpt {step=}")
-            self.load_state_dict(torch.load(ckpt, weights_only=True))
+            self.load_state_dict(torch.load(ckpt))
             # with all_logging_disabled():
             pred = self.predict_on_dataset(dataset, batch_size, iterations, workers, collate_fn, half, verbose=False)
             if output_prob:
@@ -993,7 +969,6 @@ class TrainConfig:
     checkpoint_freq: int
     workers: int
     dict = asdict
-    rrr: Optional[bool] = False
 
 
 @dataclass

@@ -148,7 +148,7 @@ def prob_metrics(targets, preds, label_set, return_arrays=False):
 
     res = {
         "AUROC_ovo": roc_auc_score(targets, preds, multi_class="ovo", labels=label_set),
-        "BCE": log_loss(targets, preds, labels=label_set),
+        "BCE": log_loss(targets, preds, eps="auto", labels=label_set),
         "ECE": netcal.metrics.ECE().measure(preds, targets),
     }
 
