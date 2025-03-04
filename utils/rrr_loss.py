@@ -34,6 +34,8 @@ class RRRLoss(_WeightedLoss):
         log_prob_ys = log_softmax(logits)
         
         gradXes = torch.autograd.grad(log_prob_ys, X, torch.ones_like(log_prob_ys), create_graph=True)[0]
+        # put at 1 wrong zones and at 0 correct ones, so loss will be high if there is an overlap between the background and the activations
+        A = 1-A
         for _ in range(len(gradXes.shape) - len(A.shape)):
             A = A.unsqueeze(dim=1)
         expand_list = [-1]*len(A.shape)
