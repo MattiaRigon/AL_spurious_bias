@@ -449,6 +449,7 @@ class ModelWrapper(MetricMixin):
             Tensor, the loss computed from the criterion.
         """
 
+        target = target[0]
         data, target = to_device(data, self.device), to_device(target, self.device)
         optimizer.zero_grad()
         output = self.model(data)
@@ -786,7 +787,10 @@ class ModelWrapper(MetricMixin):
             )
         )  # pred, y, attr, group
 
-        preds, target, attr, groups = [np.concatenate([item[i] for item in foo], axis=0) for i in range(4)]
+        preds, target, attr, groups = [
+            np.concatenate([item[i][0] if isinstance(item[i], list) else item[i] for item in foo], axis=0) 
+            for i in range(4)
+        ]            
         metrics = eval_metrics(targets=target, attributes=attr, preds=preds, gs=groups)
         log.info(
             "Evaluation complete:"
