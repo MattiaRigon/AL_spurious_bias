@@ -455,7 +455,7 @@ class ModelWrapper(MetricMixin):
         optimizer.zero_grad()
         output = self.model(data)
         # loss = self.criterion(output, target)
-        loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None, 0.1)
+        loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None, 0.5)
 
         if regularizer:
             regularized_loss = loss + regularizer()
