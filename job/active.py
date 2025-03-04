@@ -24,7 +24,7 @@ from utils.heuristics import (
 )
 from utils.modelwrapper import ModelWrapper, TestConfig, TrainConfig
 from utils.wandb_artifact import Artifact
-
+from utils.rrr_loss import RRRLoss 
 from . import JobBase
 
 logger = logging.getLogger(__name__)
@@ -62,7 +62,8 @@ class ActiveLearning(JobBase):
             group_grouper=self.dataset.grouper,
         )
 
-        self.wrapped_model = ModelWrapper(self.model, nn.CrossEntropyLoss())
+        # self.wrapped_model = ModelWrapper(self.model, nn.CrossEntropyLoss())
+        self.wrapped_model = ModelWrapper(self.model, RRRLoss())
 
         get_prob_fn = getattr(self.wrapped_model, self.heuristic.get_prob_fn_name)
         get_prob_fn = partial(get_prob_fn, **self.test_cfg.dict())

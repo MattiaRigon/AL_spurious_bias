@@ -67,7 +67,7 @@ class ModelWrapper(MetricMixin):
         self._active_dataset_size = -1
         self._ckpt_path = Path("checkpoints")
 
-        assert isinstance(criterion, _Loss)
+        # assert isinstance(criterion, _Loss)
         self.element_wise_criterion = deepcopy(criterion)
         self.element_wise_criterion.reduction = "none"
 
@@ -449,11 +449,13 @@ class ModelWrapper(MetricMixin):
             Tensor, the loss computed from the criterion.
         """
 
-        target = target[0]
         data, target = to_device(data, self.device), to_device(target, self.device)
+        data.requires_grad_(True)
+        target, target_mask = target
         optimizer.zero_grad()
         output = self.model(data)
-        loss = self.criterion(output, target)
+        # loss = self.criterion(output, target)
+        loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None, 0)
 
         if regularizer:
             regularized_loss = loss + regularizer()
