@@ -34,6 +34,7 @@ from wilds.common.grouper import CombinatorialGrouper
 from utils.dataloader import InfiniteDataLoader
 from utils.eval_helper import eval_metrics
 from utils.misc import to_device
+from utils.rrr_loss import RRRLoss
 
 log = logging.getLogger("ModelWrapper")
 
@@ -448,14 +449,18 @@ class ModelWrapper(MetricMixin):
         Returns:
             Tensor, the loss computed from the criterion.
         """
-
         data, target = to_device(data, self.device), to_device(target, self.device)
-        data.requires_grad_(True)
         target, target_mask = target
+        if isinstance(self.criterion, RRRLoss):
+            data.requires_grad_(True)
+
         optimizer.zero_grad()
         output = self.model(data)
-        # loss = self.criterion(output, target)
-        loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None, 0.5)
+
+        if isinstance(self.criterion, RRRLoss):
+            loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None, 0.05)
+        else:
+            loss = self.criterion(output, target)
 
         if regularizer:
             regularized_loss = loss + regularizer()

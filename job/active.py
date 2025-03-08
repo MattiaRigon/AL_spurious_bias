@@ -40,6 +40,7 @@ class ActiveLearning(JobBase):
     test_cfg: TestConfig
     save_dict: bool
     resume: Path | None
+    rrr : bool | None
 
     def __post_init__(self):
         super().__post_init__()
@@ -62,8 +63,10 @@ class ActiveLearning(JobBase):
             group_grouper=self.dataset.grouper,
         )
 
-        # self.wrapped_model = ModelWrapper(self.model, nn.CrossEntropyLoss())
-        self.wrapped_model = ModelWrapper(self.model, RRRLoss())
+        if self.rrr:
+            self.wrapped_model = ModelWrapper(self.model, RRRLoss())
+        else:
+            self.wrapped_model = ModelWrapper(self.model, nn.CrossEntropyLoss())
 
         get_prob_fn = getattr(self.wrapped_model, self.heuristic.get_prob_fn_name)
         get_prob_fn = partial(get_prob_fn, **self.test_cfg.dict())
