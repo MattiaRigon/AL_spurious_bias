@@ -458,7 +458,7 @@ class ModelWrapper(MetricMixin):
         output = self.model(data)
 
         if isinstance(self.criterion, RRRLoss):
-            loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None, 0.05)
+            loss = self.criterion(target_mask, data, target, output, torch.nn.CrossEntropyLoss(), None, 0.1)
         else:
             loss = self.criterion(output, target)
 
